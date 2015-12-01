@@ -70,3 +70,20 @@ fi
 # mkdir -p /tmp/env ; env | sort > /tmp/env/bash_p-$$
 echo -n listen.py instances: ; ps -ef | egrep 'listen.p[y]' | wc -l | grep . --color
 
+
+
+
+
+## Colorize the ls output ##
+# for mac
+alias ls='ls -G''
+# for unix 
+#alias ls='ls --color=auto'
+
+## Use a long listing format ##
+#alias ll='ls -la'
+
+## Show hidden files ##
+#alias l.='ls -d .* --color=auto'
+
+
