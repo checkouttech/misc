@@ -1,0 +1,42 @@
+set nocompatible
+set cursorline
+set ruler
+set showcmd
+set showmode
+set backspace=indent,eol,start
+set nobackup
+set nu
+set showmatch
+set smartcase
+set foldenable
+set foldmethod=syntax
+set showtabline=2
+set autoindent
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
+set wrap
+set history=1000
+set hlsearch
+set mouse=a
+filetype plugin on
+filetype plugin indent on
+syntax on
+colorscheme colorsbox-material
+scriptencoding utf-8
+set ofu=syntaxcomplete#Complete
+ 
+ 
+if has('statusline')
+        set laststatus=2
+ 
+" Broken down into easily includeable segments
+ 
+    set statusline=%<%f\ " Filename
+set statusline+=%w%h%m%r " Options
+set statusline+=\ [%{&ff}/%Y] " filetype
+set statusline+=\ [%{getcwd()}] " current dir
+"set statusline+=\ [A=\%03.3b/H=\%02.2B] " ASCII / Hexadecimal value of char
+set statusline+=%=%-14.(%l,%c%V%)\ %p%% " Right aligned file nav info
+endif

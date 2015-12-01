@@ -1,0 +1,72 @@
+
+# .bash_profile
+# $Id: bash_profile 78698 2013-06-24 19:03:14Z mhudson $
+
+# echo in .bash_profile under $0
+if [ -f ~/.bashrc ]; then
+      . ~/.bashrc
+fi
+
+
+# requires tRP alh bash func to query DNS
+complete -W "$(alh)" ssh
+
+export http_proxy_OLD=$http_proxy
+unset http_proxy
+# export JAVA_HOME=/usr/lib/jvm/jre-1.6.0-openjdk.x86_64
+export JAVA_HOME=/usr/lib/jvm/jre-1.6.0-sun
+export M3_HOME=/usr/local/apache-maven-3.0.3
+export M3=$M2_HOME/bin
+export PATH=$PATH:$HOME/bin:/usr/local/bin:$M2:$JAVA_HOME/bin
+
+if [ $TERM == 'xterm' -o $TERM == 'xterm-256color' ] ; then
+  export TOMCAT_HOME=/usr/share/tomcat6
+  hostname | egrep 'ovz|ufe' && echo TOMCAT_HOME=$TOMCAT_HOME
+  # do stuff needed for interactive session (versus remote SSH invocation)
+  # [ -f ~/svn/scheduler/env.sh ] && source ~/svn/scheduler/env.sh
+  # export PERL5LIB=$PERL5LIB:~/svn/test_harness/lib/perl
+  # echo   PERL5LIB=$PERL5LIB
+
+  # PS1=$'\[\e[1;32m\][\u@\h \W]\$\[\e[0m\] '
+  # export PS3=$'\[\e[1;32m\][\h \w]\$\[\e[0m\] '
+  # export PS1="\[\e[1;32m\][\h \w]\$\[\e[0m\] "
+  export PS1=$'\[\e[1;36m\]\h \[\e[22m\]\w\[\e[1m\]\$ \[\e[00m\]'
+  green=$(tput setaf 2) ; # http://stackoverflow.com/questions/1133031/shell-prompt-line-wrapping-issue
+  yellow=$(tput setaf 3)
+  blue=$(tput setaf 4)
+  purple=$(tput setaf 5)
+  cyan=$(tput setaf 6)
+  bold=$(tput bold)
+  reset=$(tput sgr0)
+  # PS1='\[$green$bold\]\h\[$reset\] \[$green$bold\]\w\[$reset\] \$ '
+  prefix=$(hostname | egrep -o '^[a-z]{4}')
+  class=$(hostname | egrep -o '[a-z]{3}[0-9]{4}')
+  dc=$(hostname | egrep -o '\.[a-z]{3}[0-9]{1}')  # echo dc=$dc
+  PS1='\[$green$bold\]$prefix\[$reset\]-\[$green\]$class\[$reset\]$dc \[$cyan$bold\]\w\[$reset\] \$ '
+
+  wiki() { dig +short txt $1.wp.dg.cx; }
+
+  # screen -ls
+  # screen -R
+  ps ux | egrep "[s]creen|[a]dtach"
+  if [ -S dtach.socket.* ]; then
+    echo A dtach socket exists --use dtach -a dtach.socket.* -r winch "--if you want to [re]attach..."
+  else
+    # sh or bash --norc or --rcfile blah or put this in ~/.bash_profile instead...
+    if [ -x /usr/bin/dtach ]; then
+      echo 'use dtach instead of screen?'
+      dtach -c dtach.socket.$$ -r winch bash
+    elif [ -x /usr/bin/screen ]; then
+      # time \
+      screen -ls
+    fi
+  fi
+
+elif [ $TERM == 'screen' ] ; then
+  # presumably the above items are already set, and don't need to be redundant...
+  echo TERM=screen
+fi
+
+# mkdir -p /tmp/env ; env | sort > /tmp/env/bash_p-$$
+echo -n listen.py instances: ; ps -ef | egrep 'listen.p[y]' | wc -l | grep . --color
+
